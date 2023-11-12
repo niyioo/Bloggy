@@ -31,7 +31,7 @@ Follow these steps to set up and run the project on your local machine.
 1. Clone this repository:
 
    ```bash
-   git clone https://github.com/niyioo/bloggy.git
+   git clone https://github.com/niyioo/blog.git
 
 2. Navigate to the Golang backend folder:
 
@@ -73,12 +73,15 @@ npm run dev
 ## Usage
 
 Access your Next.js frontend at http://localhost:3000.
+
 Access your Golang backend API at http://localhost:8080.
 
 ## API Routes
 
 /api/register - Register a new user.
+
 /api/login - Authenticate a user and get an access token.
+
 /api/blogposts - List and create blog posts.
 
 You can find more API routes and details in the Golang backend code.
