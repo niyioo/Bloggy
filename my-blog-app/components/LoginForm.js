@@ -8,6 +8,10 @@ const LoginForm = () => {
     password: '',
   });
   const [error, setError] = useState(null);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 53834e38c4002610b63a29213c90384dab0149f8
   const router = useRouter();
 
   const handleInputChange = (e) => {
@@ -17,12 +21,20 @@ const LoginForm = () => {
 
   const isFormValid = () => {
     if (!formData.email || !formData.password) {
+<<<<<<< HEAD
       setError('Please fill in all fields.');
+=======
+      setError("Please fill in all fields.");
+>>>>>>> 53834e38c4002610b63a29213c90384dab0149f8
       return false;
     }
 
     if (!isValidEmail(formData.email)) {
+<<<<<<< HEAD
       setError('Invalid email address.');
+=======
+      setError("Invalid email address.");
+>>>>>>> 53834e38c4002610b63a29213c90384dab0149f8
       return false;
     }
 
@@ -30,7 +42,11 @@ const LoginForm = () => {
   };
 
   const isValidEmail = (email) => {
+<<<<<<< HEAD
     return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+=======
+    return /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/.test(email);
+>>>>>>> 53834e38c4002610b63a29213c90384dab0149f8
   };
 
   const handleSubmit = async (e) => {
@@ -42,11 +58,22 @@ const LoginForm = () => {
 
     try {
       const response = await axios.post('/api/login', formData);
+<<<<<<< HEAD
       const token = response.data.token;
 
       router.push('/dashboard');
     } catch (error) {
       setError('Login failed. Please check your credentials.');
+=======
+
+      // Handle successful login, e.g., store the token in a cookie or local storage
+      const token = response.data.token;
+
+      // Redirect the user to the dashboard or another page
+      router.push('/dashboard');
+    } catch (error) {
+      setError("Login failed. Please check your credentials.");
+>>>>>>> 53834e38c4002610b63a29213c90384dab0149f8
     }
   };
 

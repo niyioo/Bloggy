@@ -47,7 +47,7 @@ export const loginUser = (credentials) => {
     dispatch(loginRequest());
 
     // Make an API request to authenticate the user
-    axios.post('http://localhost:8080/login', credentials)
+    axios.post('/api/login', credentials)
       .then((response) => {
         dispatch(loginSuccess(response.data));
       })
@@ -63,7 +63,7 @@ export const registerUser = (userData) => {
     dispatch(registerRequest());
 
     // Make an API request to register a new user
-    axios.post('http://localhost:8080/register', userData)
+    axios.post('/api/register', userData)
       .then(() => {
         dispatch(registerSuccess());
       })
