@@ -40,7 +40,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer database.Close(client)
 
-	if isEmailUnique(client, userInput.Email) {
+	if !isEmailUnique(client, userInput.Email) {
 		// Hash the password for security (you can use a library like golang.org/x/crypto/bcrypt)
 		hashedPassword := hashPassword(userInput.Password)
 

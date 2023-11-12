@@ -9,6 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var (
@@ -70,7 +71,7 @@ func CreateUser(client *mongo.Client, email, hashedPassword string) (string, err
 		return "", err
 	}
 
-	return result.InsertedID.(string), nil
+	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
 func GetUserByEmail(client *mongo.Client, email string) (*models.User, error) {
