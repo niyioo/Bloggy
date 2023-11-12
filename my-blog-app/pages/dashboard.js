@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { logout } from '../redux/actions/userActions';
+import BlogPostForm from '../components/BlogPostForm';
 
 const styles = {
   container: {
@@ -41,9 +45,31 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
   },
+  logoutButton: {
+    padding: '10px',
+    backgroundColor: '#dc3545',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
 };
 
 const Dashboard = () => {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const [showCreateForm, setShowCreateForm] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push('/login');
+  };
+
+  const handleCreatePost = (postData) => {
+    console.log('Creating a new blog post:', postData);
+    setShowCreateForm(false);
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Welcome to Your Blog Dashboard</h1>
@@ -56,9 +82,17 @@ const Dashboard = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Create a New Post</h2>
           <p>Start writing a new blog post and share your thoughts.</p>
-          <button style={styles.cardButton}>Create Post</button>
+          <button style={styles.cardButton} onClick={() => setShowCreateForm(true)}>
+            Create Post
+          </button>
         </div>
       </div>
+      {/* Add the logout button */}
+      <button style={styles.logoutButton} onClick={handleLogout}>
+        Logout
+      </button>
+      {/* Render the BlogPostForm conditionally */}
+      {showCreateForm && <BlogPostForm onSubmit={handleCreatePost} />}
     </div>
   );
 };

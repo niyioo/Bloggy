@@ -1,5 +1,11 @@
 import { MongoClient } from 'mongodb';
-import { hashPassword } from '../../auth/auth';
+import bcrypt from 'bcrypt';
+
+async function hashPassword(password) {
+  const saltRounds = 10;
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword;
+}
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -9,10 +15,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Email and password are required.' });
     }
 
-    const mongoClient = new MongoClient('mongodb://localhost:27017/');
+    const mongoClient = new MongoClient('mongodb://localhost:27017/bloggy');
 
     try {
       await mongoClient.connect();
+      console.log('Connected to MongoDB');
       const db = mongoClient.db('bloggy');
       const collection = db.collection('users');
 
