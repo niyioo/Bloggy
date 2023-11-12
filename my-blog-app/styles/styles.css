@@ -1,0 +1,35 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    color: lemonchiffon;
+    font-family: Arial, sans-serif;
+  }
+  
+  .container {
+    padding: 20px;
+  }
+  
+  .heading {
+    font-size: 36px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .section {
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid lemonchiffon;
+    background-color: transparent;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .button {
+    font-size: 24px;
+    margin: 5px;
+  }
+  

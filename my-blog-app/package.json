@@ -1,0 +1,26 @@
+{
+  "name": "my-blog-app",
+  "version": "1.0.0",
+  "description": "Blog platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "next dev"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niyioo/Bloggy.git"
+  },
+  "author": "Niyi Olagbegi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niyioo/Bloggy/issues"
+  },
+  "homepage": "https://github.com/niyioo/Bloggy#readme",
+  "dependencies": {
+    "axios": "^1.6.1",
+    "bcryptjs": "^2.4.3",
+    "mongodb": "^6.2.0",
+    "next": "^14.0.1"
+  }
+}
