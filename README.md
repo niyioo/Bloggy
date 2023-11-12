@@ -51,7 +51,7 @@ mongoURL := "mongodb://localhost:27017" // Change this to your MongoDB server UR
 go run main.go
 
 
-Setting Up the Frontend
+### Setting Up the Frontend
 
 1. Navigate to the Next.js frontend folder:
 
@@ -70,12 +70,13 @@ const apiUrl = 'http://localhost:8080'; // Update this with your Golang backend 
 npm run dev
 
 
-Usage
+## Usage
 
 Access your Next.js frontend at http://localhost:3000.
 Access your Golang backend API at http://localhost:8080.
 
-API Routes
+## API Routes
+
 /api/register - Register a new user.
 /api/login - Authenticate a user and get an access token.
 /api/blogposts - List and create blog posts.
