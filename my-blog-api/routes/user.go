@@ -13,14 +13,18 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+var jwtKey = []byte("12345")
+
 // RegisterUserRoutes registers user-related routes
 func RegisterUserRoutes(router *mux.Router) {
+	// Define routes for user registration and login
 	router.HandleFunc("/api/register", RegisterUser).Methods("POST")
 	router.HandleFunc("/api/login", LoginUser).Methods("POST")
 }
 
 // RegisterUser handles user registration
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body to get user registration data
 	var userInput models.UserInput
 	err := utils.DecodeJSONBody(r, &userInput)
 	if err != nil {
@@ -28,6 +32,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate and process user registration
 	client, err := database.Connect()
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, "Failed to connect to the database")
@@ -35,13 +40,18 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 	defer database.Close(client)
 
-	if isEmailUnique(client, userInput.Email) {
+	if !isEmailUnique(client, userInput.Email) {
+		// Hash the password for security (you can use a library like golang.org/x/crypto/bcrypt)
 		hashedPassword := hashPassword(userInput.Password)
+
+		// Create a new user in the database with the email and hashed password
 		userID, err := createUser(client, userInput.Email, hashedPassword)
 		if err != nil {
 			utils.RespondWithError(w, http.StatusInternalServerError, "Failed to create user")
 			return
 		}
+
+		// Generate a JWT token for the registered user
 		var jwtKey = "12345"
 		token, err := auth.GenerateToken(userID, jwtKey)
 		if err != nil {
@@ -49,6 +59,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// Respond with the token
 		utils.RespondWithJSON(w, http.StatusCreated, map[string]string{"token": token})
 	} else {
 		utils.RespondWithError(w, http.StatusConflict, "Email already exists")
@@ -57,6 +68,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 
 // LoginUser handles user login
 func LoginUser(w http.ResponseWriter, r *http.Request) {
+	// Parse the request body to get user login data
 	var userInput models.UserInput
 	err := utils.DecodeJSONBody(r, &userInput)
 	if err != nil {
@@ -64,6 +76,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Validate and process user login
 	client, err := database.Connect()
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, "Failed to connect to the database")
@@ -76,6 +89,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, http.StatusUnauthorized, "Authentication failed")
 		return
 	}
+
+	// Generate a JWT token for the logged-in user
 	var jwtKey = "12345"
 	token, err := auth.GenerateToken(userID, jwtKey)
 	if err != nil {
@@ -83,9 +98,11 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Respond with the token
 	utils.RespondWithJSON(w, http.StatusOK, map[string]string{"token": token})
 }
 
+// isEmailUnique checks if the email is unique in the database.
 func isEmailUnique(client *mongo.Client, email string) bool {
 	exists, err := database.IsEmailUnique(client, email)
 	if err != nil {
@@ -95,6 +112,7 @@ func isEmailUnique(client *mongo.Client, email string) bool {
 	return !exists
 }
 
+// hashPassword securely hashes the provided password.
 func hashPassword(password string) string {
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
@@ -104,6 +122,7 @@ func hashPassword(password string) string {
 	return string(hashedPassword)
 }
 
+// createUser creates a new user in the database with the provided email and hashed password.
 func createUser(client *mongo.Client, email, hashedPassword string) (string, error) {
 	userID, err := database.CreateUser(client, email, hashedPassword)
 	if err != nil {
@@ -113,6 +132,7 @@ func createUser(client *mongo.Client, email, hashedPassword string) (string, err
 	return userID, nil
 }
 
+// authenticateUser authenticates the user based on the provided email and password.
 func authenticateUser(client *mongo.Client, email, password string) (string, error) {
 	user, err := database.GetUserByEmail(client, email)
 	if err != nil {

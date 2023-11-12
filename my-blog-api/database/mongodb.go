@@ -7,12 +7,13 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
-	mongoURL      = "mongodb://localhost:27017/"
+	mongoURL      = "mongodb://localhost:27017"
 	clientOptions = options.Client().ApplyURI(mongoURL)
 )
 
@@ -62,7 +63,7 @@ func CreateUser(client *mongo.Client, email, hashedPassword string) (string, err
 	user := models.User{
 		Email:          email,
 		HashedPassword: hashedPassword,
-		// we can add other user properties as needed
+		// Add other user properties as needed
 	}
 
 	result, err := collection.InsertOne(context.Background(), user)
@@ -70,7 +71,7 @@ func CreateUser(client *mongo.Client, email, hashedPassword string) (string, err
 		return "", err
 	}
 
-	return result.InsertedID.(string), nil
+	return result.InsertedID.(primitive.ObjectID).Hex(), nil
 }
 
 func GetUserByEmail(client *mongo.Client, email string) (*models.User, error) {
