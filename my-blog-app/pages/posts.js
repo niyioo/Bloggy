@@ -39,6 +39,8 @@ const Posts = ({ posts }) => {
     router.push(`/post/${postId}`);
   };
 
+  console.log('Fetched posts:', posts);
+
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Blog Posts</h1>

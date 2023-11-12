@@ -59,6 +59,7 @@ const Dashboard = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [isCreatingPost, setIsCreatingPost] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -67,6 +68,8 @@ const Dashboard = () => {
 
   const handleCreatePost = async (postData) => {
     try {
+      setIsCreatingPost(true);
+
       const response = await fetch('http://localhost:8080/api/blogposts', {
         method: 'POST',
         headers: {
@@ -74,20 +77,21 @@ const Dashboard = () => {
         },
         body: JSON.stringify(postData),
       });
-  
+
       if (response.ok) {
         console.log('Blog post created successfully:', postData);
-  
-        handleViewPosts();
       } else {
-        console.error('Failed to create blog post:', response.statusText);
+        const errorMessage = await response.text();
+        console.error('Failed to create blog post:', errorMessage);
       }
     } catch (error) {
-      console.error('Error creating blog post:', error);
+      console.error('Error creating blog post:', error.message);
+    } finally {
+      setIsCreatingPost(false);
+      setShowCreateForm(false);
     }
-    setShowCreateForm(false);
   };
-  
+
   const handleViewPosts = () => {
     router.push('/posts');
   };
@@ -106,8 +110,12 @@ const Dashboard = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Create a New Post</h2>
           <p>Start writing a new blog post and share your thoughts.</p>
-          <button style={styles.cardButton} onClick={() => setShowCreateForm(true)}>
-            Create Post
+          <button
+            style={styles.cardButton}
+            onClick={() => setShowCreateForm(true)}
+            disabled={isCreatingPost}
+          >
+            {isCreatingPost ? 'Creating...' : 'Create Post'}
           </button>
         </div>
       </div>
