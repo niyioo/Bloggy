@@ -31,6 +31,31 @@ const styles = {
   },
 };
 
+const fetchPosts = async () => {
+  try {
+    const response = await fetch('http://localhost:8080/api/blogposts');
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch blog posts');
+    }
+
+    const posts = await response.json();
+
+    // Ensure each post has a valid and unique string ID
+    return posts.map((post) => {
+      if (post.ID && typeof post.ID === 'object') {
+        // Convert the ID to a string
+        post.ID = post.ID.toString();
+      }
+
+      return post;
+    });
+  } catch (error) {
+    console.error('Error fetching blog posts:', error);
+    throw error;
+  }
+};
+
 const Posts = ({ posts }) => {
   const router = useRouter();
 
@@ -45,46 +70,25 @@ const Posts = ({ posts }) => {
     <div style={styles.container}>
       <h1 style={styles.heading}>Blog Posts</h1>
       <ul style={styles.postList}>
-      {posts && posts.map((post) => (
-      <li key={post.ID}>
-        <a style={styles.postItem} onClick={() => handleViewPost(post.ID)}>
-          {post.Title}
-          </a>
+        {posts.map((post) => (
+          <li key={post.id}>
+            <a style={styles.postItem} onClick={() => handleViewPost(post.id)}>
+              {post.title}
+            </a>
           </li>
-          ))}
+        ))}
       </ul>
     </div>
   );
 };
 
 export const getServerSideProps = async () => {
-    try {
-      // Fetch data from your API
-      const response = await fetch('http://localhost:8080/api/blogposts');
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog posts');
-      }
-  
-      let posts = await response.json();
-  
-      // Ensure each post has a valid and unique string ID
-      posts = posts.map((post) => {
-        if (post.ID && typeof post.ID === 'object') {
-          // Convert the ID to a string
-          post.ID = post.ID.toString();
-        }
-  
-        return post;
-      });
-  
-      return { props: { posts } };
-    } catch (error) {
-      console.error('Error fetching blog posts:', error);
-  
-      // Return an empty array in case of an error
-      return { props: { posts: [] } };
-    }
-  };  
+  try {
+    const posts = await fetchPosts();
+    return { props: { posts } };
+  } catch (error) {
+    return { props: { posts: [] } };
+  }
+};
 
 export default Posts;
