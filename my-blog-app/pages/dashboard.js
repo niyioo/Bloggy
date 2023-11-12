@@ -70,6 +70,10 @@ const Dashboard = () => {
     setShowCreateForm(false);
   };
 
+  const handleViewPosts = () => {
+    router.push('/posts');
+  };
+
   return (
     <div style={styles.container}>
       <h1 style={styles.heading}>Welcome to Your Blog Dashboard</h1>
@@ -77,7 +81,9 @@ const Dashboard = () => {
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>My Blog Posts</h2>
           <p>You can manage and view your blog posts here.</p>
-          <button style={styles.cardButton}>View Posts</button>
+          <button style={styles.cardButton} onClick={handleViewPosts}>
+            View Posts
+          </button>
         </div>
         <div style={styles.card}>
           <h2 style={styles.cardTitle}>Create a New Post</h2>
