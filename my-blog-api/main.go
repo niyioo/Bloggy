@@ -21,6 +21,7 @@ func main() {
 
 	router := mux.NewRouter()
 	routes.RegisterUserRoutes(router)
+	routes.RegisterBlogPostRoutes(router)
 
 	handler := c.Handler(router)
 

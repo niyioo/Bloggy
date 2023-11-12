@@ -13,8 +13,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtKey = []byte("12345")
-
 // RegisterUserRoutes registers user-related routes
 func RegisterUserRoutes(router *mux.Router) {
 	// Define routes for user registration and login

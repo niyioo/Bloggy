@@ -8,8 +8,14 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+func RegisterBlogPostRoutes(router *mux.Router) {
+	router.HandleFunc("/api/blogposts", CreateBlogPostHandler).Methods("POST")
+	router.HandleFunc("/api/blogposts", GetBlogPosts).Methods("GET")
+}
 
 func CreateBlogPostHandler(w http.ResponseWriter, r *http.Request) {
 	var postInput models.BlogPostInput
@@ -57,7 +63,7 @@ func GetBlogPosts(w http.ResponseWriter, r *http.Request) {
 	}
 	defer database.Close(client)
 
-	collection := client.Database("your-database-name").Collection("blog_posts")
+	collection := client.Database("bloggy").Collection("blog_posts")
 
 	filter := primitive.M{}
 

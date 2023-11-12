@@ -31,14 +31,8 @@ const styles = {
   },
 };
 
-const Posts = () => {
+const Posts = ({ posts }) => {
   const router = useRouter();
-
-  const posts = [
-    { id: '1', title: 'Post 1' },
-    { id: '2', title: 'Post 2' },
-    // Add more posts as needed
-  ];
 
   const handleViewPost = (postId) => {
     // Navigate to the individual post page
@@ -49,16 +43,24 @@ const Posts = () => {
     <div style={styles.container}>
       <h1 style={styles.heading}>Blog Posts</h1>
       <ul style={styles.postList}>
-        {posts.map((post) => (
-          <li key={post.id} style={styles.postItem}>
-            <a style={styles.postLink} onClick={() => handleViewPost(post.id)}>
-              {post.title}
+        {posts && posts.map((post) => (
+          <li key={post.ID} style={styles.postItem}>
+            <a style={styles.postLink} onClick={() => handleViewPost(post.ID)}>
+              {post.Title}
             </a>
           </li>
         ))}
       </ul>
     </div>
   );
+};
+
+export const getServerSideProps = async () => {
+  // Fetch data from your API
+  const response = await fetch('http://localhost:8080/api/blogposts');
+  const posts = await response.json();
+
+  return { props: { posts } };
 };
 
 export default Posts;
