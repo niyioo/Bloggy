@@ -56,11 +56,33 @@ const Posts = ({ posts }) => {
 };
 
 export const getServerSideProps = async () => {
-  // Fetch data from your API
-  const response = await fetch('http://localhost:8080/api/blogposts');
-  const posts = await response.json();
-
-  return { props: { posts } };
-};
+    try {
+      // Fetch data from your API
+      const response = await fetch('http://localhost:8080/api/blogposts');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch blog posts');
+      }
+  
+      let posts = await response.json();
+  
+      // Ensure each post has a valid and unique string ID
+      posts = posts.map((post) => {
+        if (post.ID && typeof post.ID === 'object') {
+          // Convert the ID to a string
+          post.ID = post.ID.toString();
+        }
+  
+        return post;
+      });
+  
+      return { props: { posts } };
+    } catch (error) {
+      console.error('Error fetching blog posts:', error);
+  
+      // Return an empty array in case of an error
+      return { props: { posts: [] } };
+    }
+  };  
 
 export default Posts;
