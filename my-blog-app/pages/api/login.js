@@ -1,5 +1,4 @@
 import { MongoClient } from 'mongodb';
-import { validatePassword } from '../../auth/auth';
 
 export default async function handler(req, res) {
   if (req.method === 'POST') {
@@ -22,7 +21,7 @@ export default async function handler(req, res) {
         return res.status(401).json({ error: 'Login failed. Please check your credentials.' });
       }
 
-      const passwordMatch = await validatePassword(password, existingUser.hashedPassword);
+      const passwordMatch = password === existingUser.hashedpassword; // Change this line
 
       if (!passwordMatch) {
         return res.status(401).json({ error: 'Login failed. Please check your credentials.' });
@@ -40,8 +39,4 @@ export default async function handler(req, res) {
   } else {
     res.status(405).end(); // Method Not Allowed
   }
-}
-
-async function validatePassword(password, hashedPassword) {
-  return password === hashedPassword;
 }
