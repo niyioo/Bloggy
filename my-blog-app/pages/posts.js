@@ -43,13 +43,13 @@ const Posts = ({ posts }) => {
     <div style={styles.container}>
       <h1 style={styles.heading}>Blog Posts</h1>
       <ul style={styles.postList}>
-        {posts && posts.map((post) => (
-          <li key={post.ID} style={styles.postItem}>
-            <a style={styles.postLink} onClick={() => handleViewPost(post.ID)}>
-              {post.Title}
-            </a>
+      {posts && posts.map((post) => (
+      <li key={post.ID}>
+        <a style={styles.postItem} onClick={() => handleViewPost(post.ID)}>
+          {post.Title}
+          </a>
           </li>
-        ))}
+          ))}
       </ul>
     </div>
   );
