@@ -65,11 +65,29 @@ const Dashboard = () => {
     router.push('/login');
   };
 
-  const handleCreatePost = (postData) => {
-    console.log('Creating a new blog post:', postData);
+  const handleCreatePost = async (postData) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/blogposts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(postData),
+      });
+  
+      if (response.ok) {
+        console.log('Blog post created successfully:', postData);
+  
+        handleViewPosts();
+      } else {
+        console.error('Failed to create blog post:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating blog post:', error);
+    }
     setShowCreateForm(false);
   };
-
+  
   const handleViewPosts = () => {
     router.push('/posts');
   };
